@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   // var x = "300";
   // var y = [];
   //user interface logic
@@ -8,13 +7,34 @@ $(document).ready(function() {
 
     var words = $("#words").val();
     $("#outputList").text(toPig(words));
+
+    // $("#outputList").text(Regular_pigs(words));
   });
 
   //functions
+
+
+  function Regular_pigs(iiii) {
+    var input = iiii.trim().split(" ");
+    //bad input,
+    //capital letters
+    //punctuation
+
+    for (var i = 0; i < input.length; i++) {
+      if (/^[aeiou]/.test(input[i])){  // input has vowel start
+        input[i] = input[i] + "ay";
+      } else if (/^[^aeiou]/.test(input[i])) { // input has consonant start
+        input[i] = input[i].replace(/^[^aeiou]+/, "") + input[i].match(/^[^aeiou]+/) + "ay";
+      }
+    }
+    return input.join(" ");
+  }
+
+
   function toPig(iiii) {
     if (allString(iiii)) {
       // take string
-      var input = iiii.trim().split(" ");
+      var input = iiii.trim().toLowerCase().split(" ");
 
       var vowels = ["a", "e", "i", "o", "u"];
 
@@ -25,7 +45,10 @@ $(document).ready(function() {
         } else {
           //find number of consecutive cons at start
           var consIndex = 0; //do we need =0 ?
-          while (vowels.indexOf(input[i].charAt(consIndex)) === -1 && consIndex < input[i].length) {
+          while ((vowels.indexOf(input[i].charAt(consIndex)) === -1 || input[i].charAt(consIndex) === "u") && consIndex < input[i].length) {
+            if (input[i].charAt(consIndex) === "u" && input[i].charAt(consIndex - 1) !== "q"){
+              break
+            }
             consIndex++;
           }
           //pull cons from start & put cons (+ "ay") at end
